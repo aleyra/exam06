@@ -38,7 +38,6 @@ void	send_all(int fd, char *msg){
 	t_client	*t_cli = g_clients;
 
 	while (t_cli){
-		//check si on peut écrire
 		if (t_cli->fd != fd && FD_ISSET(t_cli, &cpy_write)){//<-
 			if(send(t_cli->fd, msg, strlen(msg), 0) < 0)//<-
 				fatal_error(void);
