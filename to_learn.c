@@ -54,7 +54,6 @@ void	accept_client(void){
 	if((cli_fd = accept(sock_fd, (struct sockaddr *)&clientaddr, &len))<0)//<-
 		fatal_error();
 	//prep le msg serveur et add_client_to_list puis send_all
-
 	FD_SET(cli_fd, &curr_sock);//<-
 }
 
