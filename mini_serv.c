@@ -93,7 +93,7 @@ int	add_client_to_list(int fd)//mettre le new client sur lq liste chainee
 	return (new->id);
 }
 
-void	add_client(void)//accepter un client
+void	accept_client(void)//accepter un client
 {
 	struct sockaddr_in	clientaddr;
 	socklen_t			len = sizeof(clientaddr);
@@ -128,7 +128,7 @@ int	rm_client(int fd)//supp le cli
 	return (id);
 }
 
-void	ex_msg(int fd)//envoyer un msg
+void	send_msg(int fd)//envoyer un msg
 {
 	int	i = 0;
 	int	j = 0;
@@ -192,18 +192,18 @@ int	main(int ac, char **av)
 				if (fd == sock_fd)//si la socket en question est la principale, on a un nouveau client
 				{
 					bzero(&msg, sizeof(msg));//reini un msg
-					add_client();//new client
+					accept_client();//new client
 					break ;
 				}
 				else
 				{
-			int	ret_recv = 1000;//a apprendre
-			while (ret_recv == 1000 || str[strlen(str) - 1] != '\n')//tant que le msg n'est pas vide
-			{
-				ret_recv = recv(fd, str + strlen(str), 1000, 0);
-				if (ret_recv <= 0)//dans le cas ou le client a deco
-					break ;
-			}
+					int	ret_recv = 1000;//a apprendre
+					while (ret_recv == 1000 || str[strlen(str) - 1] != '\n')//tant que le msg n'est pas vide
+					{
+						ret_recv = recv(fd, str + strlen(str), 1000, 0);
+						if (ret_recv <= 0)//dans le cas ou le client a deco
+							break ;
+					}
 					if (ret_recv <= 0)//dans le cas ou le client a deco
 					{
 						bzero(&msg, sizeof(msg));
@@ -215,7 +215,7 @@ int	main(int ac, char **av)
 					}
 					else
 					{
-						ex_msg(fd);//send msg
+						send_msg(fd);//send msg
 					}
 				}
 			}
