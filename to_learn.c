@@ -1,16 +1,6 @@
-#include <unistd.h>
-#include <sys/select.h>
-#include <sys/socket.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <netdb.h>
+//includes
 
 //une liste chainee de clients avec un fd, un id
-typedef struct s_client
-{
-	//
-}	t_client;
 
 t_client	*g_clients = NULL;//<-
 
@@ -58,10 +48,10 @@ int add_client_to_list(int fd){
 
 void	accept_client(void){
 	struct sockaddr_in	clientaddr;//<-
-	socklen_t			len = sizeof(clientaddr);
-	int					cli_fd;
+	socklen_t			len = sizeof(clientaddr);//<-
+	int					cli_fd;//<-
 
-	if((cli_fd = accept(sock_fd, (struct sockaddr *)&clientaddr, &len)) < 0)//<-
+	if((cli_fd = accept(sock_fd, (struct sockaddr *)&clientaddr, &len))<0)//<-
 		fatal_error();
 	//prep le msg serveur et add_client_to_list puis send_all
 
@@ -73,13 +63,8 @@ int	rm_client(int fd){
 	t_client	*to_del;
 	int			id = get_id(fd);
 
-	if (t_cli->fd == fd){
-		g_clients = t_cli->next;
-		free(t_cli);
-	} else {
-		//penser à travailler avec le next !!
-		free(del);
-	}
+	//g_client n'a qu'un client
+	//sinon penser à travailler avec le next !!
 	return(id);
 }
 
@@ -110,7 +95,7 @@ int	main(int ac, char** av){
 
 	if ((sock_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)//<-
 		fatal_error();
-	if (bind(sock_fd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0)//<-
+	if (bind(sock_fd, (const struct sockaddr *)&servaddr, sizeof(servaddr))<0)//<-
 		fatal_error();
 	if (listen(sock_fd, 0) < 0)//<-
 		fatal_error();
