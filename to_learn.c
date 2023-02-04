@@ -26,7 +26,7 @@ int	get_max_fd(void){
 	return (max);
 }
 
-int add_client_to_list(int fd){
+int add_client(int fd){
 	t_client	*t_cli = g_clients;
 	t_client	*new;
 
@@ -52,7 +52,7 @@ void	accept_client(void){
 
 	if((cli_fd = accept(sock_fd, (struct sockaddr *)&clientaddr, &len))<0)//<-
 		fatal_error();
-	//prep le msg serveur et add_client_to_list puis send_all
+	//sprintf msg serveur avec id = add_client puis send_all
 	FD_SET(cli_fd, &curr_sock);//<-
 }
 
@@ -104,7 +104,7 @@ int	main(int ac, char** av){
 		for (int fd = 0; fd <= get_max_fd(); fd++){
 			if (FD_ISSET(/**/)){//<-
 				if (fd == sock_fd){
-					//reini msg
+					//reset msg
 					//accept client
 					break ;
 				} else {
@@ -117,7 +117,7 @@ int	main(int ac, char** av){
 					}
 					if(ret_recv <= 0){
 						//reset de msg
-						//prep du msg serveur et suppr du client puis send_all
+						//sprintf msg serveur avec id = suppr du client puis send_all
 						FD_CLR(fd, &curr_sock);//<-
 						close(fd);//pas de leak de fd
 						break ;

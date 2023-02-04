@@ -57,22 +57,8 @@ int	get_max_fd(void){
 	return (max);
 }
 
-//une fct pour end à ts les client
-void	send_all(int fd, char *msg){
-	t_client	*t_cli = g_clients;
-
-	while (t_cli){
-		//check si on peut écrire
-		if (t_cli->fd != fd && FD_ISSET(t_cli->fd, &cpy_write)){//<-
-			if(send(t_cli->fd, msg, strlen(msg), 0) < 0)//<-
-				fatal_error(void);
-		}
-		t_cli = t_cli->next;
-	}
-}
-
 //une fct pour ajouter un client à la liste
-int add_client_to_list(int fd){
+int add_client(int fd){
 	t_client	*t_cli = g_clients;
 	t_client	*new;
 
@@ -89,21 +75,6 @@ int add_client_to_list(int fd){
 		t_cli->next = new;
 	}
 	return (new->id);
-}
-
-//une fct pour accepter un client
-void	accept_client(void){
-	struct sockaddr_in	clientaddr;//<-
-	socklen_t			len = sizeof(clientaddr);
-	int					cli_fd;
-
-	if((cli_fd = accept(sock_fd, (struct sockaddr *)&clientaddr, &len)) < 0)//<-
-		fatal_error();
-	//prep le msg serveur
-	sprintf(msg, "server: client %d just arrived\n", add_client_to_list(cli_fd));
-	send_all(cli_fd, msg);
-	//on ajoute le cli_fd à curr_sock
-	FD_SET(cli_fd, &curr_sock);//<-
 }
 
 //une fct pour suppr un client
@@ -124,6 +95,35 @@ int	rm_client(int fd){
 		free(del);
 	}
 	return(id);
+}
+
+//une fct pour accepter un client
+void	accept_client(void){
+	struct sockaddr_in	clientaddr;//<-
+	socklen_t			len = sizeof(clientaddr);
+	int					cli_fd;
+
+	if((cli_fd = accept(sock_fd, (struct sockaddr *)&clientaddr, &len)) < 0)//<-
+		fatal_error();
+	//prep le msg serveur
+	sprintf(msg, "server: client %d just arrived\n", add_client(cli_fd));
+	send_all(cli_fd, msg);
+	//on ajoute le cli_fd à curr_sock
+	FD_SET(cli_fd, &curr_sock);//<-
+}
+
+//une fct pour end à ts les client
+void	send_all(int fd, char *msg){
+	t_client	*t_cli = g_clients;
+
+	while (t_cli){
+		//check si on peut écrire
+		if (t_cli->fd != fd && FD_ISSET(t_cli->fd, &cpy_write)){//<-
+			if(send(t_cli->fd, msg, strlen(msg), 0) < 0)//<-
+				fatal_error(void);
+		}
+		t_cli = t_cli->next;
+	}
 }
 
 void	send_msg(int fd){
@@ -199,7 +199,7 @@ int	main(int ac, char** av){
 			if (FD_ISSET(fd, &cpy_read)){//<-
 				//si la socket en question est la principale alors on a un new client
 				if (fd == sock_fd){
-					//reini msg
+					//reset msg
 					bzero(&msg, sizeof(msg));
 					//accept client
 					accept_client();
