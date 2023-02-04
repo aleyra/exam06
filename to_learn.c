@@ -9,6 +9,8 @@ fd_set	curr_sock, cpy_read, cpy_write;//<-
 char	msg[42];//<-
 str[42 * 4096], tmp[42 * 4096], buf[42 * 4096 + 42];//<-
 
+/*a utiliser pour le socket(), le bind(), le listen(),
+le send(), le accept(), et le calloc()*/
 void	fatal_error(void){
 	//
 }
@@ -24,26 +26,23 @@ int	get_max_fd(void){
 	return (max);
 }
 
-void	send_all(int fd, char *msg){
-	t_client	*t_cli = g_clients;
-
-	while (t_cli){
-		if (t_cli->fd != fd && FD_ISSET(t_cli, &cpy_write)){//<-
-			if(send(t_cli->fd, msg, strlen(msg), 0) < 0)//<-
-				fatal_error(void);
-		}
-		t_cli = t_cli->next;
-	}
-}
-
 int add_client_to_list(int fd){
 	t_client	*t_cli = g_clients;
 	t_client	*new;
 
-	if(!(new = calloc(1, sizeof(t_client))))//<-
-		fatal_error();
+	calloc(1, sizeof(t_client))//<-
 	//
 	return (new->id);
+}
+
+int	rm_client(int fd){
+	t_client	*t_cli = g_clients;
+	t_client	*to_del;
+	int			id = get_id(fd);
+
+	//g_client n'a qu'un client
+	//sinon penser à travailler avec le next !!
+	return(id);
 }
 
 void	accept_client(void){
@@ -57,17 +56,17 @@ void	accept_client(void){
 	FD_SET(cli_fd, &curr_sock);//<-
 }
 
-int	rm_client(int fd){
+void	send_all(int fd, char *msg){
 	t_client	*t_cli = g_clients;
-	t_client	*to_del;
-	int			id = get_id(fd);
 
-	//g_client n'a qu'un client
-	//sinon penser à travailler avec le next !!
-	return(id);
+	while (t_cli){
+		if (t_cli->fd != fd && FD_ISSET(/**/)){//<-
+			//send msg avec flag 0
+		}
+		t_cli = t_cli->next;
+	}
 }
 
-//une fct pour envoyer un message à un fd
 void	send_msg(int fd){
 	int	i = 0;
 	int	j = 0;
@@ -76,7 +75,7 @@ void	send_msg(int fd){
 		tmp[j] = str[i];//<-
 		j++;
 		if (str[i] == '\n'){
-			//prep de buf tel qu'on va l'afficher, trouver id, et send_all
+			//sprintf ds buf du msg a afficher, et send_all
 			j = 0;//<-
 			//reset de tmp et buf avec bzero
 		}
@@ -92,12 +91,7 @@ int	main(int ac, char** av){
 	//bzero de la struct servaddr
 	//pour def le protocol TCP //presque dans main servaddr.*
 
-	if ((sock_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)//<-
-		fatal_error();
-	if (bind(sock_fd, (const struct sockaddr *)&servaddr, sizeof(servaddr))<0)//<-
-		fatal_error();
-	if (listen(sock_fd, 0) < 0)//<-
-		fatal_error();
+	//on crée la socket, on la bind et on l'écoute
 	
 	FD_ZERO(&curr_sock);//<-
 	FD_SET(sock_fd, &curr_sock);//<-
@@ -105,10 +99,10 @@ int	main(int ac, char** av){
 	
 	while(1){
 		cpy_write = cpy_read = curr_sock;//<-
-		if (select(get_max_fd() + 1, &cpy_read, &cpy_write, NULL, NULL) < 0)//<-
+		if (select(/**/) < 0)//<-
 			continue ;
 		for (int fd = 0; fd <= get_max_fd(); fd++){
-			if (FD_ISSET(fd, &cpy_read)){//<-
+			if (FD_ISSET(/**/)){//<-
 				if (fd == sock_fd){
 					//reini msg
 					//accept client

@@ -63,7 +63,7 @@ void	send_all(int fd, char *msg){
 
 	while (t_cli){
 		//check si on peut écrire
-		if (t_cli->fd != fd && FD_ISSET(t_cli, &cpy_write)){//<-
+		if (t_cli->fd != fd && FD_ISSET(t_cli->fd, &cpy_write)){//<-
 			if(send(t_cli->fd, msg, strlen(msg), 0) < 0)//<-
 				fatal_error(void);
 		}
@@ -126,7 +126,6 @@ int	rm_client(int fd){
 	return(id);
 }
 
-//une fct pour envoyer un message à un fd
 void	send_msg(int fd){
 	int	i = 0;
 	int	j = 0;
