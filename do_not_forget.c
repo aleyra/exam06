@@ -1,5 +1,3 @@
-/*a utiliser pour le socket(), le bind(), le listen(),
-le send(), le accept(), et le calloc()*/
 void	fatal_error(void){//<-
 	//
 	close(sock_fd);//attention au leak de fd
