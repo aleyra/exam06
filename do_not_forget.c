@@ -1,6 +1,6 @@
 void	fatal_error(void){//<-
 	//
-	close(sock_fd);//sock_fd vcar pas de fd ds param
+	close(sock_fd);//sock_fd car pas de fd ds param
 	//
 }
 
