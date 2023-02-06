@@ -113,13 +113,13 @@ void	accept_client(void){
 }
 
 //une fct pour end à ts les client
-void	send_all(int fd, char *msg){
+void	send_all(int fd, char *ze_msg){
 	t_client	*t_cli = g_clients;
 
 	while (t_cli){
 		//check si on peut écrire
 		if (t_cli->fd != fd && FD_ISSET(t_cli->fd, &cpy_write)){//<-
-			if(send(t_cli->fd, msg, strlen(msg), 0) < 0)//<-
+			if(send(t_cli->fd, ze_msg, strlen(ze_msg), 0) < 0)//<-
 				fatal_error(void);
 		}
 		t_cli = t_cli->next;

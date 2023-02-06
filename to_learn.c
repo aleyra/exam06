@@ -56,7 +56,7 @@ void	accept_client(void){
 	FD_SET(cli_fd, &curr_sock);//<-
 }
 
-void	send_all(int fd, char *msg){
+void	send_all(int fd, char *ze_msg){
 	t_client	*t_cli = g_clients;
 
 	while (t_cli){
