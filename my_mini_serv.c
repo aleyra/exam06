@@ -131,7 +131,7 @@ void	send_msg(int fd){
 	int	j = 0;
 
 	while (str[i]){
-		tmp[j] = str[i];//<-//on envoie que la "derniere ligne"
+		tmp[j] = str[i];//<-
 		j++;
 		if (str[i] == '\n'){
 			//prep de buf tel qu'on va l'afficher
