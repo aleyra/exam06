@@ -117,7 +117,7 @@ int	main(int ac, char** av){
 					//		break ;
 					//}
 					int	ret_recv = 1;
-					while (ret_recv == 1 || str[strlen(str) - 1] != '\n'){
+					while (ret_recv == 1 && str[strlen(str) - 1] != '\n'){
 						ret_recv = recv(fd, str + strlen(str), 1, 0);
 						printf("%d et str = %s\n", ret_recv, str);//
 						if (ret_recv <= 0)
