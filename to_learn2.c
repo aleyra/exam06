@@ -110,20 +110,12 @@ int	main(int ac, char** av){
 					add_client();
 					break ;
 				} else {
-					//int ret_recv = 1000;
-					//while (ret_recv == 1000 || str[strlen(str) - 1] != '\n'){
-					//	ret_recv = recv(fd, str + strlen(str), 1000, 0);
-					//	if (ret_recv <= 0)
-					//		break ;
-					//}
 					int	ret_recv = 1;
 					while (ret_recv == 1 && str[strlen(str) - 1] != '\n'){
 						ret_recv = recv(fd, str + strlen(str), 1, 0);
-						printf("%d et str = %s\n", ret_recv, str);//
 						if (ret_recv <= 0)
 							break ;
 					}
-					printf("on est sorti de la boucle de recv\n");//
 					if (ret_recv <= 0){
 						rm_client(fd);
 						break ;
